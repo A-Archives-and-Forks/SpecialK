@@ -366,6 +366,15 @@ SK_HDR_KeyPress ( BOOL Control,
                   BOOL Alt,
                   BYTE vkCode )
 {
+  SK_RenderBackend& rb =
+    SK_GetCurrentRenderBackend ();
+
+  // If override is not enabled and display is not HDR capable, then do nothing.
+  if ((! rb.isHDRCapable ()) && (! (__SK_HDR_16BitSwap || __SK_HDR_10BitSwap)))
+  {
+    return FALSE;
+  }
+
   #define SK_MakeKeyMask(vKey,ctrl,shift,alt)           \
     static_cast <UINT>((vKey) | (((ctrl) != 0) <<  9) | \
                                 (((shift)!= 0) << 10) | \
